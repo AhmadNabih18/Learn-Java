@@ -1,121 +1,57 @@
-import java.util.Scanner;
-class Node {
-    int data;
-    Node next;
-
-    public Node(int data) {
-        this.data = data;
-        this.next = null;
-    }
-}
-
-class LinkedList {
-    Node head;
-
-    public LinkedList() {
-        this.head = null;
-    }
-
-    public boolean isEmpty() {
-        return head == null;
-    }
-
-    public void addFirst(int data) {
-        Node newNode = new Node(data);
-        newNode.next = head;
-        head = newNode;
-    }
-
-    public void addLast(int data) {
-        Node newNode = new Node(data);
-        if (head == null) {
-            head = newNode;
-            return;
-        }
-        Node current = head;
-        while (current.next != null) {
-            current = current.next;
-        }
-        current.next = newNode;
-    }
-
-    public void insertAfter(int key, int data) {
-        Node current = head;
-        while (current != null && current.data != key) {
-            current = current.next;
-        }
-        if (current == null) {
-            addLast(data);
-            return;
-        }
-        Node newNode = new Node(data);
-        newNode.next = current.next;
-        current.next = newNode;
-    }
-
-    public void insertBefore(int key, int data) {
-        if (head == null) {
-            addFirst(data);
-            return;
-        }
-        if (head.data == key) {
-            addFirst(data);
-            return;
-        }
-        Node pre = null;
-        Node now = head;
-        while (now != null && now.data != key) {
-            pre = now;
-            now = now.next;
-        }
-        if (now == null) {
-            addLast(data);
-            return;
-        }
-        Node newNode = new Node(data);
-        newNode.next = now;
-        pre.next = newNode;
-    }
-
-    public void print() {
-        if (head == null) {
-            System.out.println("LinkedList kosong");
-            return;
-        }
-        Node current = head;
-        while (current != null) {
-            System.out.print(current.data + " -> ");
-            current = current.next;
-        }
-        System.out.println();
-    }
-}
+import java.util.*;
 
 public class Solution {
+
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int n = scanner.nextInt();
-        LinkedList linkedList = new LinkedList();
-        for (int i = 0; i < n; i++) {
-            String command = scanner.next();
-            if (command.equals("awal")) {
-                int data = scanner.nextInt();
-                linkedList.addFirst(data);
-            } else if (command.equals("akhir")) {
-                int data = scanner.nextInt();
-                linkedList.addLast(data);
-            } else if (command.equals("sebelum")) {
-                int key = scanner.nextInt();
-                int data = scanner.nextInt();
-                linkedList.insertBefore(key, data);
-            } else if (command.equals("setelah")) {
-                int key = scanner.nextInt();
-                int data = scanner.nextInt();
-                linkedList.insertAfter(key, data);
-            } else if (command.equals("cetak")) {
-                linkedList.print();
+        Scanner in = new Scanner(System.in);
+        byte jarak = in.nextByte();
+        int kayu = in.nextInt();
+        in.nextLine();
+        int hp = 10,jml;
+        String jumlah ="";
+        String arr[] = new String[jarak];
+        for (int i=0;i<jarak;i++)
+        {
+            arr[i] = in.nextLine().toLowerCase();
+            if (arr[i].contains("perbaiki"))
+            {
+                jumlah = arr[i].substring(9);
+                jml = Integer.parseInt(jumlah);
+                if (kayu >= 0)
+                {
+                    kayu -= jml;
+                    if (hp <= 100)
+                    {
+                        hp = hp + jml;
+                        if(hp >= 100)
+                        {
+                            hp = 100;
+                        }
+                    }else
+                    {
+                        hp += 0;
+                    }
+                }else
+                {
+                    System.out.println("Stock kayu habis!!");
+                    hp += 0;
+                }
+            } else if (arr[i].contains("ombak"))
+            {
+                jumlah = arr[i].substring(6);
+                jml = Integer.parseInt(jumlah);
+                kayu -= jml;
+                hp = hp - 20;
+                if (hp <=0)
+                {
+                    System.out.println("Tidak Kapal Tenggelam!!!");
+                    break;
+                }
+            }else
+            {
+                System.out.printf("Kapal sampai tujuan dengan hitpoint %d/100",hp);
+                break;
             }
         }
-        scanner.close();
     }
 }
